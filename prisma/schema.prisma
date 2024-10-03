@@ -36,10 +36,9 @@ model User {
   updatedAt                   DateTime @updatedAt
 
   Company                     Company[]
-
   Application                 Application[]
-
   Favorite                    Favorite[]
+  Job                         Job[]
 }
 
 model Job {
@@ -54,6 +53,8 @@ model Job {
   position                    Int
   companyId                   String    @db.ObjectId
   company                     Company   @relation(fields: [companyId], references: [id])
+  createdById                 String  @db.ObjectId
+  user                        User    @relation(fields: [createdById], references: [id])
   createdAt                   DateTime  @default(now())
   updatedAt                   DateTime  @updatedAt
 

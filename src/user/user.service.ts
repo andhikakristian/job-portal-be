@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
-import { RegisterUserDto } from './dto/user.dto';
+import { RegisterUserDto, UpdateUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt'
 
 @Injectable()
@@ -25,7 +25,6 @@ export class UserService {
             profilePhoto,
             role,
         } = registerUserDto;
-
 
         if(!fullName || !email || !phoneNumber || !password) {
             throw new BadRequestException("All fields are required")
@@ -103,5 +102,43 @@ export class UserService {
             success: true,
             message: 'Successfully loggedin user'
         }
+    }
+
+    //LOGOUT
+    async logout(): Promise<{message:string; success:boolean}> {
+        return {message: 'Logged Out successfully', success: true}
+    }
+
+    //UPDATE USER
+    async updateProfile(id: string, updateUserDto: UpdateUserDto) {
+        const {
+            fullName, 
+            email, 
+            phoneNumber, 
+            profileBio, 
+            profileSkills,
+            profileResume,
+            profilePhoto,
+        } = updateUserDto;
+
+        if (!fullName || !email || !phoneNumber || !profileBio || !profileSkills) {
+            throw new BadRequestException('All fields are required')
+        }
+
+        const user = await this.prisma.user.findUnique({
+            where: {id},
+            data: {
+                fullName, 
+                email, 
+                phoneNumber, 
+                profileBio, 
+                profileSkills,
+                profileResume,
+                profilePhoto,
+            }
+        });
+
+        return user;
+
     }
 }
