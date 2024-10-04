@@ -125,7 +125,7 @@ export class UserService {
             throw new BadRequestException('All fields are required')
         }
 
-        const user = await this.prisma.user.findUnique({
+        const user = await this.prisma.user.update({
             where: {id},
             data: {
                 fullName, 

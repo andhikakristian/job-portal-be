@@ -58,7 +58,7 @@ model Job {
   createdAt                   DateTime  @default(now())
   updatedAt                   DateTime  @updatedAt
 
-  Application                 Application[]
+  applications                 Application[]
 
   Favorite                    Favorite[]
 }
